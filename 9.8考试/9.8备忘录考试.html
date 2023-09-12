@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script src="../jquery/引入/jquery-3.7.1.min.js"></script>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .box {
+        width: 500px;
+        height: 500px;
+        margin: auto;
+        text-align: center;
+        background-color: rgb(245, 245, 245);
+    }
+
+
+    .lost {
+        width: 420px;
+        height: 400px;
+        margin: auto;
+        background-color: #fff;
+        position: relative;
+    }
+
+    #add {
+        width: 84%;
+        height: 40px;
+        padding: 0 30px;
+        border: none;
+        outline: none;
+        box-shadow: 1px 1px 1px black;
+    }
+
+    #all {
+        width: 15px;
+        height: 15px;
+        position: absolute;
+        left: 5px;
+        top: 14px;
+    }
+
+    .footer {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+    }
+
+    ul {
+        width: 100%;
+        height: 340px;
+        overflow: hidden;
+        overflow-y: scroll;
+
+    }
+
+    ::-webkit-scrollbar {
+        /*隐藏滚轮*/
+        display: none;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+
+    li {
+        width: 100%;
+        height: 50px;
+        list-style: none;
+        line-height: 50px;
+        text-align: left;
+    }
+
+    li input {
+        width: 15px;
+        height: 15px;
+        margin-left: 5px;
+    }
+
+    p {
+        float: right;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+
+    .active {
+        text-decoration: line-through;
+        color: #ccc;
+    }
+</style>
+
+<body>
+    <div class="box">
+        <h1>备忘录</h1>
+        <div class="lost">
+            <input type="text" name="" id="add" placeholder="需要做什么">
+            <input type="checkbox" name="" id="all">
+            <ul>
+
+            </ul>
+
+            <div class="footer">
+                <span><strong id="num">0</strong>个未完成</span>&emsp;
+                <a href="#" id="alllist">所有</a>&emsp;
+                <a href="#" id="undone">未完成</a>&emsp;
+                <a href="#" id="computed">已完成</a>&emsp;
+                <a href="#" id="delCompute">清楚所有完成项</a>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var datalist = []
+
+    $(function () {
+        $('#alllist').click(showallFun)
+        $('#undone').click(showundoneFun)
+        $('#computed').click(showcomputedFun)
+        $('#delCompute').click(delComputeFun)
+        $('#add').keydown(addfun)
+        readerlist()
+        //多少未完成
+        countfun()
+        //全选
+        $('#all').change(staufun)
+    })
+
+    //全选
+    function staufun() {
+        var checkde = $(this).prop('checked');
+        datalist.forEach(function (item) {
+            item.status = checkde;
+        });
+        localStorage.setItem('backup', JSON.stringify(datalist));
+        readerlist();
+        countfun();
+    }
+
+    //清楚所有完成项
+    function delComputeFun() {
+        datalist = datalist.filter((item) => {
+            return !item.status
+        })
+        localStorage.setItem('backup', JSON.stringify(datalist));
+        readerlist()
+    }
+
+
+
+
+    //单个复选框状态的改变
+    $(document).on('change', 'ul li input[type="checkbox"]', function () {
+        var index = $(this).data('index');
+        datalist[index].status = $(this).prop('checked');
+        localStorage.setItem('backup', JSON.stringify(datalist));
+        countfun();
+    });
+
+
+
+    //已完成列表
+    function showcomputedFun() {
+        let datas = datalist.filter((item) => {
+            return item.status
+        })
+        readerlist(datas)
+        localStorage.setItem('backup', JSON.stringify(datalist));
+    }
+
+    //未完成列表
+    function showundoneFun() {
+        let datas = datalist.filter((item) => {
+            return !item.status;
+        })
+        readerlist(datas)
+        localStorage.setItem('backup', JSON.stringify(datalist));
+    }
+
+    //所有列表
+    function showallFun() {
+        readerlist()
+    };
+
+
+    //回车键添加
+    function addfun() {
+        if (event.key != 'Enter') return
+        let data = {
+            con: $("#add").val(),
+            status: false,
+        };
+        console.log(data);
+        // 添加到datalist数组
+        datalist.unshift(data)
+        $('#add').val("");
+        localStorage.setItem('backup', JSON.stringify(datalist));
+        readerlist()
+        countfun()
+    }
+
+    //未完成的数量
+    function countfun() {
+        let data = datalist.filter((item) => {
+            return item.status == false;
+        });
+        $('#num').html(data.length)
+        readerlist()
+    }
+
+
+
+    // 删除
+    function deltefun() {
+        let index = $(this).data('index');
+        datalist.splice(index, 1);
+        localStorage.setItem('backup', JSON.stringify(datalist));
+        readerlist()
+    }
+
+    //渲染列表
+    function readerlist(tdata) {
+        var data = tdata || datalist
+        let html = "";
+        data.forEach((item, index) => {
+            html += `<li> 
+                      <input ${item.status ? 'checked' : ''} type='checkbox' data-index="${index}">
+                      <span contentEditable="true"  class="${item.status ? 'active' : ''}">${item.con}</span>
+                       <p data-index="${index}">❌</p>
+                      </li>`;
+        });
+        $('ul').html(html);
+        $('ul p').click(deltefun);
+        // checkallfun()
+    }
+
+    // 本地数据
+    window.onload = function () {
+        let backupData = localStorage.getItem('backup');
+        if (backupData) {
+            datalist = JSON.parse(backupData);
+            countfun();
+        }
+    };
+
+</script>
+
+</html>

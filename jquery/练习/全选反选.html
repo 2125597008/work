@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全选反选</title>
+</head>
+<script src="../引入/jquery-3.7.1.js"></script>
+<style>
+
+</style>
+
+<body>
+    <label for="">
+        <input type="checkbox" id="quan">全选反选
+    </label>
+    <br>
+    <label for=""><input type="checkbox">1</label>
+    <label for=""><input type="checkbox">2</label>
+    <label for=""><input type="checkbox">3</label>
+    <label for=""><input type="checkbox">4</label>
+    <label for=""><input type="checkbox">5</label>
+    <label for=""><input type="checkbox">6</label>
+
+</body>
+<script>
+    $(function () {
+        $('#quan').change(function () {
+            if (this.checked) {
+                $('input[type="checkbox"]').prop('checked', true);
+            } else {
+                $('input[type="checkbox"]').prop('checked', false);
+            }
+        });
+    })
+</script>
+
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    table {
+        width: 1200px;
+        border-collapse: collapse;
+        float: left;
+    }
+
+    tbody {
+        text-align: center;
+    }
+
+    #form {
+        width: 200px;
+        display: inline-block;
+        margin-left: 50px;
+    }
+</style>
+
+<body>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>名字</th>
+                <th>歌手</th>
+                <th>类型</th>
+                <th>专辑</th>
+                <th>发行时间</th>
+                <th>发布时间</th>
+                <th>更新时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <div id="form">
+        搜索<input type="text" name="" id="con">
+        <button id="search">搜索</button>
+        <form action="#">
+            名字：<input type="text" name="" id="title"><br>
+            歌手：<input type="text" name="" id="per"><br>
+            类型：<input type="text" name="" id="types"><br>
+            专辑：<input type="text" name="" id="album"><br>
+            发行时间：<input type="text" name="" id="year"><br><br>
+            <input type="submit" name="" id="sub" value="提交">&emsp;&emsp;&emsp;&nbsp;
+        </form>
+    </div>
+</body>
+<script>
+    var con = document.querySelector('#con');
+    var search = document.querySelector('#search');
+    var tbody = document.querySelector('tbody');
+    var sub = document.querySelector('#sub');
+    var title = document.querySelector('#title');
+    var artist = document.querySelector('#per');
+    var genre = document.querySelector('#types');
+    var album = document.querySelector('#album');
+    var year = document.querySelector('#year');
+    var id = null
+    sub.addEventListener('click', subfun)
+    search.addEventListener('click', searchfun)
+    let data = []
+    window.addEventListener('load', function () {
+        addfun()
+    })
+
+    function searchfun() {
+
+        // xhr = new XMLHttpRequest()
+        // xhr.open('GET', `https://mp3.zzgoodqc.cn/api/songs/${id}`)
+        // xhr.send()
+        // xhr.onload = function () {
+        //     addfun()
+        // }
+    }
+
+    function subfun() {
+        console.log(title.value);
+        if (sub.value == "提交") {
+            console.log(123);
+            let data = {
+                title: title.value,
+                artist: artist.value,
+                genre: genre.value,
+                album: album.value,
+                year: year.value
+            }
+            data = JSON.stringify(data)
+            var xmh = new XMLHttpRequest()
+            xmh.open('POST', 'https://mp3.zzgoodqc.cn/api/songs', true)
+            xmh.setRequestHeader("Content-Type", "application/json");
+            xmh.send(data)
+            xmh.onload = function () {
+                console.log(xmh.responseText)
+            }
+            addfun()
+        }
+        if (sub.value == "确认修改") {
+            upd()
+        }
+
+    }
+
+    tbody.addEventListener('click', tbodyfun)
+    function tbodyfun() {
+        if (event.target.innerHTML == "删除") {
+            console.log(event.target.dataset.id);
+            if (confirm("确定要删吗")) {
+                let idx = event.target.dataset.id;
+                var xhr = new XMLHttpRequest();
+                xhr.open("DELETE", `https://mp3.zzgoodqc.cn/api/songs/${idx}`);
+                xhr.send();
+                xhr.onload = function () {
+                    addfun()
+                }
+            }
+        }
+        if (event.target.innerHTML == "修改") {
+            let idx = event.target.dataset.index;
+            let idxx = event.target.dataset.id;
+            console.log(idx);
+            console.log(data.data[idx]);
+            title.value = data.data[idx].title;
+            artist.value = data.data[idx].artist
+            genre.value = data.data[idx].genre
+            album.value = data.data[idx].album
+            year.value = data.data[idx].year
+            sub.value = '确认修改'
+            id = idxx
+        }
+    }
+
+
+
+    function upd() {
+        let data = {
+            title: title.value,
+            artist: artist.value,
+            genre: genre.value,
+            album: album.value,
+            year: year.value
+        }
+        data = JSON.stringify(data)
+        var xxx = new XMLHttpRequest()
+        xxx.open('PUT', `https://mp3.zzgoodqc.cn/api/songs/${id}`)
+        xxx.setRequestHeader("Content-Type", "application/json");
+        xxx.send(data)
+        xxx.onload = function () {
+            console.log(xxx.response);
+            addfun()
+        }
+    }
+
+
+
+    function addfun() {
+        event.preventDefault();
+        var xml = new XMLHttpRequest();
+        xml.open('GET', 'https://mp3.zzgoodqc.cn/api/songs')
+        xml.send();
+        xml.onload = function () {
+            var teax = JSON.parse(xml.response);
+            console.log(teax);
+
+            data = teax
+            renderTeas();
+        }
+        xml.onerror = function () {
+            console.log('失败');
+        }
+    }
+
+    function renderTeas() {
+        var html = ''
+        data.data.forEach((item, index) => {
+            html +=
+                `
+            <tr>
+                 <td>${item.id}</td>
+                 <td>${item.title}</td>
+                 <td>${item.artist}</td>
+                 <td>${item.genre}</td>
+                 <td>${item.album}</td>
+                 <td>${item.year}</td>
+                 <td>${item.created_at}</td>
+                 <td>${item.updated_at}</td>
+                 <td>
+                     <button data-id='${item.id}'>删除</button>
+                     <button data-id='${item.id}' data-index='${index}'>修改</button>   
+                 </td>
+            </tr>
+            `
+        });
+        tbody.innerHTML = html;
+    }
+
+
+
+</script>
+
+</html>

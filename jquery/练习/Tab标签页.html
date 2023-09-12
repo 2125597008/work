@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tab标签页</title>
+    <script src="../引入/jquery-3.7.1.min.js"></script>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: "Microsoft YaHei";
+    }
+
+    li {
+        list-style: none;
+    }
+
+    .box {
+        width: 400px;
+        margin: 20px auto;
+        border: 1px solid #dcdcdc;
+    }
+
+    .ul_list {
+        width: 100%;
+        height: 35px;
+        border-bottom: 1px solid #dcdcdc;
+    }
+
+    .ul_list li {
+        float: left;
+        width: 25%;
+        line-height: 35px;
+        text-align: center;
+        border-left: 1px solid #dcdcdc;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+
+    .ul_list li.active {
+        background: #00a1ea;
+        color: #fff;
+    }
+
+    .div_box {
+        padding: 20px;
+    }
+
+    .div_box .div_list {
+        display: none;
+    }
+
+    .div_box .div_list ul li {
+        line-height: 20px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <div class="box">
+        <ul class="ul_list clearfix">
+            <li class="active">1</li>
+            <li>2</li>
+            <li>3</li>
+        </ul>
+        <div class="div_box">
+            <div class="div_list" style="display:block;">
+                <ul>
+                    <li>案审判的就是看到爬升阶段怕买到</li>
+                </ul>
+            </div>
+            <div class="div_list">
+                <ul>
+                    <li>a安康几年几十年狄拉克没电缆</li>
+                </ul>
+            </div>
+            <div class="div_list">
+                <ul>
+                    <li>啊空间倒垃圾送到家爱普生代课老师</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $(function () {
+        $('.box .ul_list li').on('click', function () {
+            $(this).addClass('active').siblings('li').removeClass('active');
+            var n = $(this).index();
+            $('.div_box .div_list').eq(n).show().siblings('.div_list').hide();
+        });
+    });
+</script>
+
+</html>

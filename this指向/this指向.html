@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    const person = {
+        name: 'json',
+        age: 30,
+        instroduce(city, suibian) {
+            console.log(`${this.name}的年龄是${this.age}，来自${city}，喜欢${suibian}`);
+        }
+    }
+    person.instroduce('北京', '前端');
+    const otherperson = {
+        name: '茅利斯',
+        age: 20,
+    }
+    person.instroduce.call(otherperson, "Londan", "毛里求斯")
+
+
+    const array = [1, 2, 3, 4, 5]
+    console.log(Math.max.apply(null, array));
+
+    const arr1 = ['a', 'b', 'c']
+    const arr2 = ['d', 'e', 'f']
+    Array.prototype.push.apply(arr1, arr2)
+    console.log(arr1);
+
+
+    function greet() {
+        console.log(`萨达姆卡松没打算的,${this.name}!`);
+    }
+    const ppp = {
+        name: "马上都会",
+    }
+    greet.apply(ppp, null);
+    greet.bind(ppp, null)();
+
+    // 数组去重
+    function unique(array) {
+        return Array.from(new Set(array));
+    }
+    console.log(unique([1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9]));
+
+    // 数组扁平化
+    function flatten(array) {
+        return array.reduce((acc, val) => acc.concat(val), []);
+    }
+    console.log(flatten([1, 2, [3, 4], [5, [6, 7]]]));
+
+    // 数组求和
+    function sum(array) {
+        return array.reduce((acc, val) => acc + val, 0);
+    }
+    console.log(sum([1, 2, 3, 4, 5]));
+
+
+</script>
+
+</html>

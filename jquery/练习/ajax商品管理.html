@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ajax商品管理</title>
+</head>
+<script src="../引入/jquery-3.7.1.min.js"></script>
+<style>
+    table {
+        width: 1200px;
+        border-collapse: collapse;
+    }
+
+    tr {
+        text-align: center;
+    }
+</style>
+
+<body>
+    <input type="text" name="" id="sar" placeholder="搜索名字">
+    <button id="search">搜索</button>
+    <br><br>
+    <table border="1a">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>名字</th>
+                <th>库存</th>
+                <th>价格</th>
+                <th>状态</th>
+                <th>出售</th>
+                <th>发布事件</th>
+                <th>更新时间</th>
+                <th>图</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    ID&emsp;:&emsp;<input type="text" id="ID"><br>
+    名字:&emsp;<input type="text" id="goods_name"><br>
+    库存:&emsp;<input type="number" id="stock"><br>
+    价格:&emsp;<input type="number" id="price"><br>
+    状态:&emsp;<input type="number" id="zhuang"><br>
+    出售:&emsp;<input type="number" id="sold"><br>
+    图&emsp;:&emsp;<input type="text" id="simg"><br>
+    <button id="add">添加</button>
+
+</body>
+<script>
+    $(function () {
+        addfun()
+    })
+
+
+    $('#search').click(function () {
+        var searchText = $('#sar').val()
+        console.log(searchText);
+        var data = {
+            goods_name: searchText
+        }
+        var xxs = new XMLHttpRequest();
+        xxs.open('POST', 'https://liu.zzgoodqc.cn/goodsx/search')
+        xxs.setRequestHeader('Content-Type', 'application/json');
+        xxs.send(JSON.stringify(data));
+        xxs.onload = function () {
+            var resData = JSON.parse(xxs.responseText);
+            console.log(resData.data);
+            render(resData);
+        };
+    });
+
+    $('#add').click(function () {
+        if ($('#add').text() === "添加") {
+            let data = {
+                goods_name: $('#goods_name').val(),
+                stock: $('#stock').val(),
+                price: $('#price').val(),
+                status: $('#zhuang').val(),
+                sold: $('#sold').val(),
+                img: $('#simg').val(),
+            }
+            console.log(data);
+            var xhl = new XMLHttpRequest();
+            data = JSON.stringify(data);
+            xhl.open('POST', 'https://liu.zzgoodqc.cn/goodsx/add', true)
+            xhl.setRequestHeader("Content-Type", "application/json");
+            xhl.send(data)
+            xhl.onload = function () {
+                console.log(xhl.responseText);
+            }
+        }
+        if ($("#add").text() === "确认修改") {
+            upd()
+        }
+        addfun()
+    })
+
+    $('tbody').on('click', 'button', function () {
+        if ($(this).text() === '删除') {
+            var id = $(this).attr('data-id');
+            console.log(id);
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', `https://liu.zzgoodqc.cn/goodsx/delete?id=${id}`, true)
+            xhr.send()
+            xhr.onload = function () {
+                console.log(xhr.responseText);
+            }
+            addfun();
+        }
+        if ($(this).text() === '修改') {
+            var index = $(this).attr('data-index');
+            var idx = $(this).attr('data-id');
+            $('#ID').val(data.data[index].id)
+            $('#goods_name').val(data.data[index].goods_name)
+            $('#stock').val(data.data[index].stock)
+            $('#price').val(data.data[index].price)
+            $('#zhuang').val(data.data[index].status)
+            $('#sold').val(data.data[index].sold)
+            $('#simg').val(data.data[index].img)
+            $('#add').text("确认修改")
+        }
+    })
+
+    function upd() {
+        let data = {
+            id: $("#ID").val(),
+            goods_name: $('#goods_name').val(),
+            stock: $('#stock').val(),
+            price: $('#price').val(),
+            status: $('#zhuang').val(),
+            sold: $('#sold').val(),
+            img: $('#simg').val(),
+        }
+        console.log(data);
+        var xll = new XMLHttpRequest()
+        data = JSON.stringify(data);
+        xll.open('POST', 'https://liu.zzgoodqc.cn/goodsx/update')
+        xll.setRequestHeader("Content-Type", "application/json");
+        xll.send(data)
+        xll.onload = function () {
+            console.log(xll.responseText);
+        }
+        addfun()
+    }
+
+    function addfun() {
+        var xml = new XMLHttpRequest();
+        xml.open('GET', 'https://liu.zzgoodqc.cn/goodsx/goodslist')
+        xml.send();
+        xml.onload = function () {
+            var teax = JSON.parse(xml.response);
+            data = teax
+            render(teax);
+        }
+        xml.onerror = function () {
+            console.log('失败');
+        }
+    }
+
+    function render(test) {
+        var html = ''
+        test.data.forEach((item, index) => {
+            html += `
+            <tr>
+                 <td>${item.id}</td>
+                 <td>${item.goods_name}</td>
+                 <td>${item.stock}</td>
+                 <td>${item.price}</td>
+                 <td>${item.status}</td>
+                 <td>${item.sold}</td>
+                 <td>${item.created_at}</td>
+                 <td>${item.updated_at}</td>
+                 <td>${item.img}</td>
+                 <td>
+                     <button data-id='${item.id}'>删除</button>
+                     <button data-id='${item.id}' data-index='${index}'>修改</button>   
+                 </td>
+            </tr>
+            `
+        });
+        $('tbody').html(html);
+    }
+</script>
+
+</html>

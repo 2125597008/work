@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自定义表单</title>
+</head>
+<script src="../引入/jquery-3.7.1.js"></script>
+<style>
+    #box {
+        width: 500px;
+        height: 500px;
+        border: 1px solid #ccc;
+        overflow-y: hidden;
+        overflow-y: scroll;
+    }
+
+    input[type="text"] {
+        width: 70px;
+        margin-left: 20px;
+        margin-top: 20px;
+    }
+
+    input[type="date"] {
+        width: 100px;
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+</style>
+
+<body>
+    <button id="text">文本框</button>
+    <button id="fu">复选框</button>
+    <button id="radio">单选框</button>
+    <button id="data">日期框</button>
+    <br><br>
+    <div id="box">
+    </div>
+</body>
+<script>
+    $('#text').click(function () {
+        $('#box').append('<input type="text" name="name" id="name" value="123">')
+    })
+    $('#fu').click(function () {
+        $('#box').append('<label for=""><input type="checkbox" value="苹果">苹果</label> <label for=""><input type="checkbox" value="苹果">香蕉</label> <label for=""><input type="checkbox" value="苹果">橘子</label>')
+    })
+    $('#radio').click(function () {
+        $('#box').append('<label for=""><input type = "radio" name = "n" >男</label><label for= "" ><input type="radio" name="n">女</label>')
+    })
+    $('#data').click(function () {
+        $('#box').append('<input type="date" name="name" id="name">')
+    })
+</script>
+
+</html>

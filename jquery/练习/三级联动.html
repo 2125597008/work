@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三级联动</title>
+</head>
+<script src="../引入/jquery-3.7.1.min.js"></script>
+<script src="../../../增删改查/city.js"></script>
+<style>
+    select {
+        width: 80px;
+    }
+</style>
+
+<body>
+    省:<select name="" id="provvice">
+        <option value=""></option>
+    </select>
+    市:<select name="" id="city">
+        <option value=""></option>
+    </select>
+    县:<select name="" id="area">
+        <option value=""></option>
+    </select>
+</body>
+<script>
+    $(function () {
+        let html = "<option>请选择省</option>"
+        citys.forEach((item, index) => {
+            html += `<option value='${index}'>${item.name}</option>`
+        });
+        $('#provvice').html(html)
+    })
+
+    $('#provvice').change(function () {
+        proindex = this.value
+        var city = citys[proindex].city
+        let html = "<option>请选择市</option>"
+        city.forEach((item, index) => {
+            html += `<option value="${index}">${item.name}</option>`
+        });
+        $('#city').html(html)
+    })
+
+    $('#city').change(function () {
+        cityindex = this.value
+        var area = citys[proindex].city[cityindex].area
+        let html = "<option>请选择市</option>"
+        area.forEach((item, index) => {
+            html += `<option value="${index}">${item}</option>`
+        });
+        $('#area').html(html)
+    })
+
+
+
+
+</script>
+
+</html>

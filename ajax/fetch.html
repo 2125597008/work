@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button onclick="add()">添加</button>
+</body>
+<script>
+
+
+
+    function add() {
+        var data = {
+            title: "王维",
+            artist: 1,
+            genre: 1,
+            album: 1,
+            year: 1,
+        };
+        fetch('https://mp3.zzgoodqc.cn/api/songs', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+            })
+    }
+
+
+
+</script>
+
+</html>

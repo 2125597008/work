@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script src="../引入/jquery-3.7.1.min.js"></script>
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+<style>
+    #box {
+        width: 200px;
+        height: 200px;
+        border: 1px solid gray;
+    }
+</style>
+
+<body>
+    <!-- <table>
+        <thead>
+            <tr>
+                <th>123</th>
+                <th>58</th>
+                <th>13</th>
+                <th>12312</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>-->
+    <div id="box">
+
+    </div>
+    <button id="searchBtn">点击</button>
+
+    <form class="cmxform" id="commentForm" method="get" action="">
+        <fieldset>
+            <legend>输入您的名字，邮箱，URL，备注。</legend>
+            <p>
+                <label for="cname">Name (必需, 最小两个字母)</label>
+                <input id="cname" name="name" minlength="2" type="text" required>
+            </p>
+            <p>
+                <label for="cemail">E-Mail (必需)</label>
+                <input id="cemail" type="email" name="email" required>
+            </p>
+            <p>
+                <label for="curl">URL (可选)</label>
+                <input id="curl" type="url" name="url">
+            </p>
+            <p>
+                <label for="ccomment">备注 (必需)</label>
+                <textarea id="ccomment" name="comment" required></textarea>
+            </p>
+            <p>
+                <input class="submit" type="submit" value="Submit">
+            </p>
+        </fieldset>
+    </form>
+</body>
+
+
+<script>
+
+
+    $(function () {
+        $.fn.extend({
+            add: function () {
+                $('#box').css('background-color', 'blue')
+            },
+        });
+        $('#searchBtn').click(function () {
+            $('input').add();
+        })
+    })
+
+
+
+// function dologin(qrid, username, token) {
+    //     $.ajax({
+    //         url: "http://api.passport.pptv.com/v3/login/qrcode.do", //接口地址
+    //         type: "post",                                           //接口请求方式post/get
+    //         dataType: "jsonp",                                      //返回的数据类型格式
+    //         data: { qrid: qrid, username: username, token: token },        //给后端传输的参数
+    //         success: function (data) {
+    //             console.log(data)								//请求的回调，成功
+    //         }
+    //     });
+    // }
+
+    // $(document).ready(function () {
+    //     $("#searchBtn").click(function () {
+    //         $.ajax({
+    //             type: "GET",
+    //             url: 'https://liu.zzgoodqc.cn/goodsx/goodslist',
+    //             data: {
+    //                 goods_name: goods_name,
+    //                 status: status
+    //             },
+    //             headers: {
+    //                 "user-name": 123456,
+    //             },
+    //             dataType: "json",
+    //             success: function (data) {
+    //                 if (data.errorCode == 0) {
+    //                     $("#nickname").val(mylogin.nickname);
+    //                 } else {
+    //                     $("#nickname").val("用户");
+    //                 }
+    //             },
+    //             error: function (jqXHR) {
+    //                 console.log("Error: " + jqXHR.status);
+    //             }
+    //         });
+    //     });
+    // });
+</script>
+
+</html>

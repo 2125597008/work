@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .table {
+        width: 1200px;
+        border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+
+    }
+
+    .table th {
+        background-color: #f2f2f2;
+    }
+
+    .table tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .table .add-row {
+        background-color: #dff0d8;
+    }
+
+    a {
+        color: black;
+        text-decoration: none;
+
+    }
+</style>
+
+<body>
+    <input type="text" name="" id="searchkuang" placeholder="搜索名字">
+    <button id="search">搜索</button><br><br>
+    <table border="1" class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>名字</th>
+                <th>库存</th>
+                <th>价格</th>
+                <th>状态</th>
+                <th>出售</th>
+                <th>发布时间</th>
+                <th>更新时间</th>
+                <th>图</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    <br>
+    <a href="#" id="prev">上一页</a>
+    &emsp;<span id="page">0</span>&emsp;
+    <a href="#" id="next">下一页</a>
+    <br><br>
+    <div class="popup-overlay">
+        <div class="popup-content">
+            <form action="#">
+                ID：&emsp;<input type="text" name="" id="id"><br>
+                名字：<input type="text" name="" id="goods_name"><br>
+                库存：<input type="number" name="" id="stock"><br>
+                价格：<input type="number" name="" id="price"><br>
+                状态：<input type="text" name="" id="zhuang"><br>
+                出售：<input type="number" name="" id="sold"><br>
+                图片：<input type="text" name="" id="simg"><br><br>
+                <input type="submit" id="sub" value="提交"></input>
+            </form>
+
+        </div>
+    </div>
+</body>
+
+<script>
+    var search = document.querySelector('#search');
+    var searText = document.querySelector('#searchkuang');
+
+    var prev = document.querySelector('#prev');
+    var next = document.querySelector('#next');
+    var pages = document.querySelector('#page');
+
+    var tbody = document.querySelector('tbody');
+    var sub = document.querySelector('#sub');
+    var goods_name = document.querySelector('#goods_name');
+    var stock = document.querySelector('#stock')
+    var price = document.querySelector('#price')
+    var zhuang = document.querySelector('#zhuang')
+    var sold = document.querySelector('#sold')
+    var simg = document.querySelector('#simg')
+    var id = document.querySelector('#id')
+
+    var page = 1
+    limit = 2
+    count = 0
+
+    // pages.addEventListener('click', pagefun)
+    tbody.addEventListener('click', tbodyList);
+    sub.addEventListener('click', subfun)
+    search.addEventListener('click', searchfun)
+    window.addEventListener('load', function () {
+        addfun()
+    })
+
+
+    // function pagefun() {
+    //     page = page == 1 ? 1 : page - 1;
+    //     fenye()
+
+    // }
+
+    // function fenye() {
+    //     var params = {
+    //         page: page,
+    //         limit: limit
+    //     }
+    //     var xxs = new XMLHttpRequest()
+    //     xxs.open('GET', 'https://liu.zzgoodqc.cn/goodsx/listByPage')
+    //     xxs.send()
+    //     xxs.onload = function (res) {
+    //         count = res.count
+    //         renderTeas(res.data)
+    //     }
+    // }
+
+
+
+    function searchfun() {
+        event.preventDefault();
+        var searchText = searText.value;
+        var data = {
+            goods_name: searchText
+        }
+        var xml = new XMLHttpRequest();
+        xml.open('POST', 'https://liu.zzgoodqc.cn/goodsx/search')
+        xml.setRequestHeader('Content-Type', 'application/json');
+        xml.send(JSON.stringify(data));
+        xml.onload = function () {
+            var resData = JSON.parse(xml.responseText);
+            console.log(resData.data);
+            renderTeas(resData);
+        };
+    }
+
+
+
+    function upd() {
+        event.preventDefault();
+        let data = {
+            id: id.value,
+            goods_name: goods_name.value,
+            stock: stock.value,
+            price: price.value,
+            status: zhuang.value,
+            sold: sold.value,
+            img: simg.value
+        }
+        data = JSON.stringify(data)
+        var xxx = new XMLHttpRequest()
+        xxx.open('POST', `https://liu.zzgoodqc.cn/goodsx/update`)
+        xxx.setRequestHeader("Content-Type", "application/json");
+        xxx.send(data)
+        xxx.onload = function () {
+            console.log(xxx.response);
+            addfun()
+        }
+    }
+
+    function subfun() {
+        if (sub.value == "提交") {
+            console.log(123);
+            let data = {
+                goods_name: goods_name.value,
+                stock: stock.value,
+                price: price.value,
+                status: zhuang.value,
+                sold: sold.value,
+                img: simg.value
+            }
+            var xhh = new XMLHttpRequest()
+            xhh.open('POST', 'https://liu.zzgoodqc.cn/goodsx/add', true)
+            xhh.setRequestHeader("Content-Type", "application/json");
+            data = JSON.stringify(data)
+            xhh.send(data)
+            xhh.onload = function () {
+                console.log(xhh.responseText)
+            }
+            addfun()
+        }
+        if (sub.value == '确认修改') {
+            upd()
+        }
+    }
+
+
+    function tbodyList() {
+        event.preventDefault();
+        if (event.target.innerHTML == "删除") {
+            let id = event.target.dataset.id;
+            console.log(id);
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", `https://liu.zzgoodqc.cn/goodsx/delete?id=${id}`, true);
+            xhr.send();
+            xhr.onload = function () {
+                console.log(xhr.responseText);
+            }
+            addfun();
+        }
+        if (event.target.innerHTML == "修改") {
+            let idxx = event.target.dataset.id;
+            let idx = event.target.dataset.index
+            console.log(idxx);
+            id.value = data.data[idx].id
+            console.log(data.data[idx]);
+            goods_name.value = data.data[idx].goods_name;
+            stock.value = data.data[idx].stock
+            price.value = data.data[idx].price
+            zhuang.value = data.data[idx].status
+            sold.value = data.data[idx].sold
+            simg.value = data.data[idx].img
+            sub.value = '确认修改'
+        }
+    }
+
+    function addfun() {
+        event.preventDefault();
+        var xml = new XMLHttpRequest();
+        xml.open('GET', 'https://liu.zzgoodqc.cn/goodsx/goodslist')
+        xml.send();
+        xml.onload = function () {
+            var teax = JSON.parse(xml.response);
+            // console.log(teax);
+            data = teax
+            renderTeas(teax);
+        }
+        xml.onerror = function () {
+            console.log('失败');
+        }
+    }
+
+    function renderTeas(test) {
+        var html = ''
+        test.data.forEach((item, index) => {
+            html += `
+            <tr>
+                 <td>${item.id}</td>
+                 <td>${item.goods_name}</td>
+                 <td>${item.stock}</td>
+                 <td>${item.price}</td>
+                 <td>${item.status}</td>
+                 <td>${item.sold}</td>
+                 <td>${item.created_at}</td>
+                 <td>${item.updated_at}</td>
+                 <td>${item.img}</td>
+                 <td>
+                     <button data-id='${item.id}'>删除</button>
+                     <button data-id='${item.id}' data-index='${index}'>修改</button>   
+                 </td>
+            </tr>
+            `
+        });
+        tbody.innerHTML = html;
+    }
+
+</script>
+
+</html>

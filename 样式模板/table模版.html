@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>HTML页面示例</title>
+  <style>
+    /* 外部容器 */
+    .outer-container {
+      display: flex;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    /* 内部容器 */
+    #container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    /* 添加按钮样式 */
+    .add-button,
+    button {
+      padding: 10px 20px;
+      width: 100px;
+      border-radius: 5%;
+      background-color: #2486b9;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    /* 表格样式 */
+    #centered-table {
+      min-width: 700px;
+      text-align: center;
+      border-collapse: collapse;
+    }
+
+    #centered-table th,
+    #centered-table td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+
+    #centered-table th {
+      background-color: #f2f2f2;
+    }
+
+    /* 弹窗遮罩样式 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+
+    /* 表单容器 */
+    .form-container {
+      width: 300px;
+      margin: 0 auto;
+    }
+
+    /* 表单标题 */
+    .form-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    /* 表单元素 */
+    .form-element {
+      margin-bottom: 10px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .form-select {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .form-checkbox-label {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    /* 修改按钮样式 */
+    .modify-button {
+      width: 60px;
+      padding: 6px 0px;
+      /* 调整按钮内边距 */
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      /* 调整按钮字体大小 */
+    }
+
+    button:hover {
+      background-color: rgb(118, 186, 222);
+    }
+
+    /* .sss {
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+      object-position: 50% 20%; 
+    }*/
+
+    /* .img-object {
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+      /* object-position: 1px;
+    } */
+  </style>
+</head>
+
+<body>
+  <div class="outer-container">
+    <div id="container">
+      <!-- 添加按钮 -->
+      <button class="add-button" onclick="showAddModal()">添加</button>
+      <!-- <div class="sss">
+        <img src="./鱼1.jpg" alt="" class="img-object">
+
+      </div> -->
+
+      <!-- 表格 -->
+      <table id="centered-table">
+        <tr>
+          <th>列1</th>
+          <th>列2</th>
+          <th>列3</th>
+          <th>操作</th>
+        </tr>
+        <tr>
+          <td>数据1</td>
+          <td>数据2</td>
+          <td>数据3</td>
+          <td><button class="modify-button">修改</button></td>
+        </tr>
+        <tr>
+          <td>数据4</td>
+          <td>数据5</td>
+          <td>数据6</td>
+          <td><button class="modify-button">修改</button></td>
+        </tr>
+      </table>
+    </div>
+    <!-- 添加表单的弹窗遮罩 -->
+    <div id="add-modal" class="modal">
+      <div class="modal-content">
+        <!-- 添加表单内容 -->
+        <div class="form-container">
+          <h2 class="form-title">示例表单</h2>
+
+          <div class="form-element">
+            <label for="name" class="form-label">姓名:</label>
+            <input type="text" id="name" class="form-input" />
+          </div>
+
+          <div class="form-element">
+            <label class="form-label">性别:</label>
+            <label for="male" class="form-checkbox-label">
+              <input type="radio" id="male" name="gender" /> 男
+            </label>
+            <label for="female" class="form-checkbox-label">
+              <input type="radio" id="female" name="gender" /> 女
+            </label>
+          </div>
+
+          <div class="form-element">
+            <label for="country" class="form-label">国家:</label>
+            <select id="country" class="form-select">
+              <option value="china">中国</option>
+              <option value="usa">美国</option>
+              <option value="uk">英国</option>
+            </select>
+          </div>
+
+          <div class="form-element">
+            <label class="form-label">爱好:</label>
+            <label for="hobby1" class="form-checkbox-label">
+              <input type="checkbox" id="hobby1" name="hobbies" /> 篮球
+            </label>
+            <label for="hobby2" class="form-checkbox-label">
+              <input type="checkbox" id="hobby2" name="hobbies" /> 足球
+            </label>
+            <label for="hobby3" class="form-checkbox-label">
+              <input type="checkbox" id="hobby3" name="hobbies" /> 游泳
+            </label>
+          </div>
+
+          <button type="submit">提交</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 修改表单的弹窗遮罩 -->
+    <div id="edit-modal" class="modal">
+      <div class="modal-content">
+        <!-- 修改表单内容 -->
+        <div class="form-container">
+          <h2 class="form-title">修改表单</h2>
+
+          <div class="form-element">
+            <label for="name" class="form-label">姓名:</label>
+            <input type="text" id="name" class="form-input" />
+          </div>
+
+          <div class="form-element">
+            <label class="form-label">性别:</label>
+            <label for="male" class="form-checkbox-label">
+              <input type="radio" id="male" name="gender" /> 男
+            </label>
+            <label for="female" class="form-checkbox-label">
+              <input type="radio" id="female" name="gender" /> 女
+            </label>
+          </div>
+
+          <div class="form-element">
+            <label for="country" class="form-label">国家:</label>
+            <select id="country" class="form-select">
+              <option value="china">中国</option>
+              <option value="usa">美国</option>
+              <option value="uk">英国</option>
+            </select>
+          </div>
+
+          <div class="form-element">
+            <label class="form-label">爱好:</label>
+            <label for="hobby1" class="form-checkbox-label">
+              <input type="checkbox" id="hobby1" name="hobbies" /> 篮球
+            </label>
+            <label for="hobby2" class="form-checkbox-label">
+              <input type="checkbox" id="hobby2" name="hobbies" /> 足球
+            </label>
+            <label for="hobby3" class="form-checkbox-label">
+              <input type="checkbox" id="hobby3" name="hobbies" /> 游泳
+            </label>
+          </div>
+
+          <button type="submit">保存</button>
+          <button>取消</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- JavaScript 代码，用于显示和隐藏弹窗遮罩 -->
+  <script>
+    var addModal = document.getElementById("add-modal");
+    var editModal = document.getElementById("edit-modal");
+
+    // 显示添加表单的弹窗遮罩
+    function showAddModal() {
+      addModal.style.display = "block";
+    }
+
+    // 隐藏添加表单的弹窗遮罩
+    function hideAddModal() {
+      addModal.style.display = "none";
+    }
+
+    // 显示修改表单的弹窗遮罩
+    function showEditModal() {
+      editModal.style.display = "block";
+    }
+
+    // 隐藏修改表单的弹窗遮罩
+    function hideEditModal() {
+      editModal.style.display = "none";
+    }
+  </script>
+</body>
+
+</html>

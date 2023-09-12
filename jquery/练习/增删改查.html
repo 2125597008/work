@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>增删改查</title>
+</head>
+<script src="../引入/jquery-3.7.1.min.js"></script>
+<style>
+    table {
+        width: 500px;
+        border-collapse: collapse;
+    }
+
+    tr {
+        text-align: center;
+    }
+
+    img {
+        float: right;
+        width: 400px;
+        height: 400px;
+        object-fit: cover;
+    }
+</style>
+
+<body>
+
+    <div>
+        名字：<input type="text" name="" id="name">
+        性别：<input type="text" name="" id="sex">
+        年龄：<input type="text" name="" id="age">
+    </div>
+
+    <button id="tian">添加</button>
+
+    <br>
+    <br>
+
+    <input type="text" placeholder="搜索" id="search">
+    <button id="sear">搜索</button>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>名字</th>
+                <th>性别</th>
+                <th>年龄</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <img src="https://www.ntet.cn/uploads/images/20230814/20230814113249_25661.gif" alt="">
+
+    <script>
+        var list = [
+            {
+                name: '张三',
+                sex: "女",
+                age: 18
+            }
+        ];
+        $(function () {
+            renderTable()
+        })
+
+        function renderTable() {
+            var html = '';
+            var searchStr = $('#search').val().trim();
+            list.forEach((item, index) => {
+                if (searchStr === '' || item.name.includes(searchStr)) {
+                    html += `
+            <tr>
+              <td>${item.name}</td>
+              <td>${item.sex}</td>
+              <td>${item.age}</td>
+              <td>
+                <button data-index="${index}" class="delete-btn">删除</button>
+                <button data-index="${index}" class="modify-btn">修改</button>
+              </td>
+            </tr> `;
+                }
+            });
+            $('tbody').html(html);
+        }
+
+        $('#sear').click(function () {
+            renderTable();
+        });
+
+        $('#tian').click(function () {
+            var index = $(this).attr('data-index');
+            if ($(this).text() === '添加') {
+                var obj = {
+                    name: $('#name').val(),
+                    age: $('#age').val(),
+                    sex: $('#sex').val()
+                };
+                list.push(obj);
+            } else {
+                list[index].name = $('#name').val();
+                list[index].age = $('#age').val();
+                list[index].sex = $('#sex').val();
+                $('#tian').text('添加');
+                $(this).removeAttr('data-index');
+            }
+            renderTable();
+            $('#name').val('');
+            $('#age').val('');
+            $('#sex').val('');
+        });
+
+        $('tbody').on('click', '.modify-btn', function () {
+            var index = $(this).attr('data-index');
+            $('#name').val(list[index].name);
+            $('#age').val(list[index].age);
+            $('#sex').val(list[index].sex);
+            $('#tian').text('确定');
+            $('#tian').attr('data-index', index);
+        });
+
+        $('tbody').on('click', '.delete-btn', function () {
+            var index = $(this).attr('data-index');
+            list.splice(index, 1);
+            renderTable();
+        });
+
+        renderTable();
+
+    </script>
+
+</body>
+
+</html>

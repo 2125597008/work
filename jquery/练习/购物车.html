@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>购物车</title>
+    <script src="../引入/jquery-3.7.1.min.js"></script>
+</head>
+<style>
+    table {
+        background-color: aliceblue;
+        width: 600px;
+        border-collapse: collapse;
+        margin-top: 50px;
+        margin: 100px auto;
+        overflow: hidden;
+        overflow-y: scroll;
+    }
+
+    tr {
+        text-align: center;
+        height: 50px;
+    }
+
+    button {
+        border: 1px solid #1e7db9;
+        box-shadow: 0 1px 2px #8fcaee inset, 0 -1px 0 #497897 inset, 0 -2px 3px #8fcaee inset;
+        background: -webkit-linear-gradient(top, #42a4e0, #2e88c0);
+        width: 140px;
+        line-height: 38px;
+        text-align: center;
+        font-weight: bold;
+        color: #fff;
+        text-shadow: 1px 1px 1px #333;
+        border-radius: 5px;
+        margin: 0 20px 20px 0;
+        position: relative;
+        overflow: hidden;
+    }
+</style>
+
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>商品</th>
+                <th>库存</th>
+                <th>单价（元）</th>
+                <th>加入购物车</th>
+            </tr>
+        </thead>
+        <tbody id="tb">
+
+        </tbody>
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <th>商品</th>
+                <th>库存</th>
+                <th>单价（元）</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody id="tbd">
+
+        </tbody>
+    </table>
+</body>
+<script>
+
+    $(function () {
+        listfun();
+    });
+
+    var list = [
+        {
+            commodity: "香蕉",
+            num: 10,
+            price: 15,
+        },
+        {
+            commodity: "苹果",
+            num: 10,
+            price: 15,
+        },
+        {
+            commodity: "橘子",
+            num: 10,
+            price: 15,
+        },
+    ];
+
+    $('#tb').on("click", "button", function () {
+        var index = $(this).attr('data-index');
+        var selected = list[index];
+        if (selected.num > 0) {
+            addToCart(selected);
+            renderCart();
+            updateList(index, selected.num - 1);
+        }
+    });
+
+
+    $('#tbd').on("click", "button", function () {
+        var index = $(this).attr('data-index');
+        var selected = cart[index];
+        removeFromCart(index);
+        renderCart();
+        updateList(selected.listIndex, selected.num + 1);
+    });
+
+
+
+
+    function listfun() {
+        let html = "";
+        list.forEach((item, index) => {
+            html += `
+            <tr>
+                <td>${item.commodity}</td>
+                <td>${item.num}</td>
+                <td>${item.price}</td>
+                <td><button data-index="${index}">加入购物车</button></td>
+            </tr>
+            `;
+        });
+        $('#tb').html(html);
+    }
+
+    var cart = [];
+
+    function addToCart(item) {
+        cart.push(item);
+    }
+
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+    }
+
+    function renderCart() {
+        let html = "";
+        cart.forEach((item, index) => {
+            html += `
+            <tr>
+                <td>${item.commodity}</td>
+                <td>1</td>
+                <td>${item.price}</td>
+                <td><button data-index="${index}">移出购物车</button></td>
+            </tr>
+            `;
+        });
+        $('#tbd').html(html);
+    }
+
+    function updateList(index, num) {
+        list[index].num = num;
+        listfun();
+    }
+
+
+</script>
+
+</html>
